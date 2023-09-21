@@ -27,6 +27,31 @@ public class UsersRepository {
             throw new RuntimeException(e);
         }
     }
+    public User findOne(long id){
+        try(Statement statement = connection.createStatement()){
+            String SQL = String.format("SELECT * FROM users where id = %d", id);
+            ResultSet resultSet = statement.executeQuery(SQL);
+            User curUser = new User();
+            while (resultSet.next()){
+                curUser.setId(resultSet.getInt("id"));
+                curUser.setName(resultSet.getString("name"));
+            }
+            return curUser;
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return new User();
+    }
+    public void updateOne(long id, User updatedUser){
+        try(Statement statement = connection.createStatement()){
+            String SQL = String.format("update users set id = %d , name = '%s' where id = %d", updatedUser.getId(), updatedUser.getName(),id);
+            statement.execute(SQL);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+
     public List<User> index(){
         List<User> array = new ArrayList<>();
         try (Statement statement = connection.createStatement()){
@@ -42,5 +67,21 @@ public class UsersRepository {
             e.printStackTrace();
         }
         return array;
+    }
+    public void save(User user){
+        try(Statement statement = connection.createStatement()){
+            String SQL = String.format("insert into users values (%d, '%s')", user.getId(),user.getName());
+            statement.execute(SQL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void delete(long id){
+        try (Statement statement = connection.createStatement()){
+            String SQL = String.format("delete from users where id = %d", id);
+            statement.execute(SQL);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 }

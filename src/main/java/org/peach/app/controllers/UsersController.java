@@ -1,12 +1,11 @@
 package org.peach.app.controllers;
 
+import org.peach.app.models.User;
 import org.peach.app.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/users")
@@ -26,8 +25,37 @@ public class UsersController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") long id, Model model){
         model.addAttribute("id",id);
+        model.addAttribute("user",usersRepository.findOne(id));
         return "users/user";
     }
+
+
+    @GetMapping("/new")
+    public String requestToAddNewUser(@ModelAttribute("newUser") User user){
+        return "users/new";
+    }
+    @PostMapping()
+    public String createUser(@ModelAttribute("user") User user){
+        usersRepository.save(user);
+        return "redirect:/users";
+    }
+    @GetMapping("/{id}/edit")
+    public String requestToEditUser(Model model, @PathVariable("id") long id){
+        model.addAttribute("curUser", usersRepository.findOne(id));
+        return "users/edit";
+    }
+    @PatchMapping("/{id}")
+    public String editUser(@ModelAttribute("curUser")User user, @PathVariable("id") long id){
+        usersRepository.updateOne(id,user);
+        return "redirect:/users";
+    }
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable("id") long id){
+        usersRepository.delete(id);
+        return "redirect:/users";
+    }
+
+
 
 
 
