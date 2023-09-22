@@ -5,7 +5,10 @@ import org.peach.app.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/users")
@@ -35,7 +38,11 @@ public class UsersController {
         return "users/new";
     }
     @PostMapping()
-    public String createUser(@ModelAttribute("user") User user){
+    public String createUser(@ModelAttribute("newUser") @Valid User user,
+                             BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return "users/new";
+        }
         usersRepository.save(user);
         return "redirect:/users";
     }
@@ -45,7 +52,12 @@ public class UsersController {
         return "users/edit";
     }
     @PatchMapping("/{id}")
-    public String editUser(@ModelAttribute("curUser")User user, @PathVariable("id") long id){
+    public String editUser(@ModelAttribute("curUser") @Valid User user,
+                           BindingResult bindingResult,
+                           @PathVariable("id") long id){
+        if (bindingResult.hasErrors()){
+            return "users/edit";
+        }
         usersRepository.updateOne(id,user);
         return "redirect:/users";
     }
