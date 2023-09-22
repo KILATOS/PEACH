@@ -43,9 +43,11 @@ public class UsersRepository {
         return new User();
     }
     public void updateOne(long id, User updatedUser){
-        try(Statement statement = connection.createStatement()){
-            String SQL = String.format("update users set id = %d , name = '%s' where id = %d", updatedUser.getId(), updatedUser.getName(),id);
-            statement.execute(SQL);
+        try(PreparedStatement preparedStatement = connection.prepareStatement("update users set id = ? , name = ? where id = ?")){
+            preparedStatement.setLong(1,updatedUser.getId());
+            preparedStatement.setString(2,updatedUser.getName());
+            preparedStatement.setLong(3,id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -69,17 +71,18 @@ public class UsersRepository {
         return array;
     }
     public void save(User user){
-        try(Statement statement = connection.createStatement()){
-            String SQL = String.format("insert into users values (%d, '%s')", user.getId(),user.getName());
-            statement.execute(SQL);
+        try(PreparedStatement preparedStatement = connection.prepareStatement("insert into users values (?,?)")){
+            preparedStatement.setLong(1,user.getId());
+            preparedStatement.setString(2,user.getName());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
     public void delete(long id){
-        try (Statement statement = connection.createStatement()){
-            String SQL = String.format("delete from users where id = %d", id);
-            statement.execute(SQL);
+        try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users where id = ?")){
+            preparedStatement.setLong(1,id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
         }
