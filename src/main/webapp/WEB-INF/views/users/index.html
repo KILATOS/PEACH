@@ -5,8 +5,14 @@
     <title>Users</title>
 </head>
 <body>
+
+<hr>
 <div th:each="user : ${users}">
   <a th:href="@{/users/{id}(id=${user.getId()})}"th:text="${user.getName()}"></a>
 </div>
+<hr>
+<a th:href="@{/batchTest/deleting}">DELETING</a>
+<a th:href="@{/batchTest}" >Test</a>
+
 </body>
 </html>

@@ -2,12 +2,15 @@ package org.peach.app.repositories;
 
 import org.peach.app.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -41,5 +44,63 @@ public class UsersRepository {
     public void delete(long id){
         jdbcTemplate.update("delete from users where id = ?", id);
 
+    }
+
+    ///////////////////////////////////////////////
+    /////////// Testing batch insertion ///////////
+    ///////////////////////////////////////////////
+
+    public void insertMultiple(){
+        List<User> usersToAdd = createManyUsers();
+        long before = System.currentTimeMillis();
+        for(User curUser : usersToAdd){
+            jdbcTemplate.update("insert into users values (?,?)", curUser.getId(),curUser.getName());
+        }
+        long after = System.currentTimeMillis();
+        System.out.println("Time of multiple insertion " + (after - before));
+
+    }
+    private static List<User> createManyUsers(){
+        List<User> result = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            User curUser = new User(i,"Name" + i);
+            result.add(curUser);
+        }
+        return result;
+    }
+
+    public void insertBatch() {
+        List<User> usersToAdd = createManyUsers();
+        long before = System.currentTimeMillis();
+        jdbcTemplate.batchUpdate("insert into users values (?,?)", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
+                preparedStatement.setLong(1,usersToAdd.get(i).getId());
+                preparedStatement.setString(2,usersToAdd.get(i).getName());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return usersToAdd.size();
+            }
+        });
+
+        long after = System.currentTimeMillis();
+        System.out.println("Time of batch insertion " + (after - before));
+
+
+    }
+    public void deleteBatch(){
+        jdbcTemplate.batchUpdate("delete from users where id = ?", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
+                preparedStatement.setLong(1,i);
+            }
+
+            @Override
+            public int getBatchSize() {
+                return 1000;
+            }
+        });
     }
 }

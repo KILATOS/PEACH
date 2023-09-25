@@ -38,8 +38,9 @@ public class UsersController {
         return "users/new";
     }
     @PostMapping()
-    public String createUser(@ModelAttribute("newUser") @Valid User user,
-                             BindingResult bindingResult){
+    public String createUser(   @ModelAttribute("newUser")
+                                 @Valid User user,
+                                BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return "users/new";
         }
@@ -66,6 +67,11 @@ public class UsersController {
         usersRepository.delete(id);
         return "redirect:/users";
     }
+
+
+
+
+
 
 
 
