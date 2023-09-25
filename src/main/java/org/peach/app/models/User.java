@@ -4,6 +4,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 public class User {
+
     private long id;
     @NotEmpty(message =  "Name shouldn't be empty")
     @Size(min = 2, max = 30, message = "Invalid size of name")
