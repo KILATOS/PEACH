@@ -1,17 +1,15 @@
 package org.peach.app.repositories;
 
 import org.peach.app.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class UsersRepository {
@@ -25,9 +23,13 @@ public class UsersRepository {
 
 
 
-    public User findOne(long id){
+    public User findOneById(long id){
         return jdbcTemplate.query("SELECT * FROM users where id = ?",  new UsersMapper(), id).stream().
                 findAny().orElse(null);
+    }
+    public Optional<User> findOneByName(String name){
+        return jdbcTemplate.query("SELECT * FROM users WHERE name = ?",new BeanPropertyRowMapper<>(User.class), name).
+                stream().findAny();
     }
     public void updateOne(long id, User updatedUser){
         jdbcTemplate.update("update users set name = ? where id = ?",updatedUser.getName(), id );

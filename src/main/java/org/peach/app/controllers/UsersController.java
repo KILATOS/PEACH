@@ -2,7 +2,7 @@ package org.peach.app.controllers;
 
 import org.peach.app.models.User;
 import org.peach.app.repositories.UsersRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.peach.app.util.UserValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +14,11 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UsersController {
     private final UsersRepository usersRepository;
+    private final UserValidator userValidator;
 
-    public UsersController(UsersRepository usersRepository) {
+    public UsersController(UsersRepository usersRepository, UserValidator userValidator) {
         this.usersRepository = usersRepository;
+        this.userValidator = userValidator;
     }
 
     @GetMapping()
@@ -28,7 +30,7 @@ public class UsersController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") long id, Model model){
         model.addAttribute("id",id);
-        model.addAttribute("user",usersRepository.findOne(id));
+        model.addAttribute("user",usersRepository.findOneById(id));
         return "users/user";
     }
 
@@ -41,6 +43,7 @@ public class UsersController {
     public String createUser(   @ModelAttribute("newUser")
                                  @Valid User user,
                                 BindingResult bindingResult){
+        userValidator.validate(user,bindingResult);
         if (bindingResult.hasErrors()){
             return "users/new";
         }
@@ -49,13 +52,14 @@ public class UsersController {
     }
     @GetMapping("/{id}/edit")
     public String requestToEditUser(Model model, @PathVariable("id") long id){
-        model.addAttribute("curUser", usersRepository.findOne(id));
+        model.addAttribute("curUser", usersRepository.findOneById(id));
         return "users/edit";
     }
     @PatchMapping("/{id}")
     public String editUser(@ModelAttribute("curUser") @Valid User user,
                            BindingResult bindingResult,
                            @PathVariable("id") long id){
+        userValidator.validate(user,bindingResult);
         if (bindingResult.hasErrors()){
             return "users/edit";
         }
