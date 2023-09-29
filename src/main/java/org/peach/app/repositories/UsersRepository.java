@@ -34,7 +34,9 @@ public class UsersRepository {
     public void updateOne(long id, User updatedUser){
         jdbcTemplate.update("update users set name = ?, address = ? where id = ?",updatedUser.getName(),updatedUser.getAddress(), id );
 
-
+    }
+    public void updateIsAdmin(User userToUpdate){
+        jdbcTemplate.update("update  users set isadmin = ? where id = ?", true, userToUpdate.getId());
     }
     public List<User> index(){
         return jdbcTemplate.query("SELECT * FROM users", new BeanPropertyRowMapper<>(User.class));

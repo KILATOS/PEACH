@@ -14,6 +14,8 @@ public class User {
     @Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}", message = "Your address should be like this: \"Country, City, 000000\"")
     private String address;
 
+    private boolean isAdmin;
+
     public User(long id, String name, String email) {
         this.id = id;
         this.name = name;
