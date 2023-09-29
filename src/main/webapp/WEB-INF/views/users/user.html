@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
+    <link th:href="@{/styles/styleForUser.css}" rel="stylesheet" type="text/css" />
     <meta charset="UTF-8">
     <title th:text="${id}"></title>
 </head>
 <body>
-<a th:href="@{/users/{id}/edit(id=${user.getId()})}">Edit</a>
-<form th:method="DELETE" th:action="@{/users/{id}(id=${user.getId()})}" th:object="${user}">
-    <input type="submit" value="DELETE" ></input>
-</form>
+<div class="spanOfButtons">
+    <a th:href="@{/users/{id}/edit(id=${user.getId()})}" class="btn">Edit</a>
+    <form th:method="DELETE" th:action="@{/users/{id}(id=${user.getId()})}" th:object="${user}">
+        <input type="submit" value="DELETE" class="btn" ></input>
+    </form>
+</div>
+
 </body>
 </html>

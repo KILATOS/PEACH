@@ -44,6 +44,18 @@ public class SpringConfig implements WebMvcConfigurer {
         templateResolver.setApplicationContext(applicationContext);
         templateResolver.setPrefix("/WEB-INF/views/");
         templateResolver.setSuffix(".html");
+        templateResolver.setCheckExistence(true);
+
+        return templateResolver;
+    }
+    @Bean
+    public SpringResourceTemplateResolver cssTemplateResolver() {
+        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+        templateResolver.setApplicationContext(applicationContext);
+        templateResolver.setPrefix("/WEB-INF/views/");
+        templateResolver.setSuffix(".css");
+        templateResolver.setCheckExistence(true);
+
         return templateResolver;
     }
 
@@ -51,6 +63,7 @@ public class SpringConfig implements WebMvcConfigurer {
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
+        templateEngine.addTemplateResolver(cssTemplateResolver());
         templateEngine.setEnableSpringELCompiler(true);
         return templateEngine;
     }

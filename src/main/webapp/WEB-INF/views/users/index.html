@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
+    <link th:href="@{/styles/styleForUser.css}" rel="stylesheet" type="text/css" />
     <meta charset="UTF-8">
     <title>Users</title>
+
+
 </head>
 <body>
 
 <hr>
 <div th:each="user : ${users}">
-  <a th:href="@{/users/{id}(id=${user.getId()})}"th:text="${user.getName()}"></a>
+  <a class="eachUser" th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getName()}"></a>
 </div>
 <hr>
-<a th:href="@{/batchTest/deleting}">DELETING</a>
-<a th:href="@{/batchTest}" >Test</a>
-<a th:href="@{/users/new}" >Adding</a>
+<a class="btn" th:href="@{/users/new}" >Adding</a>
+
 
 </body>
 </html>
