@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import java.util.Optional;
+
 @Component
 public class UserValidator implements Validator {
 
@@ -24,8 +27,14 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         User curUser = (User) target;
-        if (usersRepository.findOneByName(curUser.getName()).isPresent()){
-            errors.rejectValue("name","","This is name is already exists");
+        Optional<User> userToFind = usersRepository.findOneByName(curUser.getName());
+        if (userToFind.isPresent()){
+            if (userToFind.get().getId() != curUser.getId()) {
+                errors.rejectValue("name","","This name is already exists");
+            }
+        }
+        if (curUser.getAddress() ==null){
+            errors.rejectValue("address", "", "Address cannot be empty");
         }
 
     }

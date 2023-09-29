@@ -6,7 +6,10 @@
 </head>
 <body>
 <form th:method="PATCH" th:action="@{/users/{id}(id=${curUser.getId()})}" th:object="${curUser}">
-
+    <label for="address_input">ADDRESS</label>
+    <input type="text" th:field = "*{address}" id="address_input">
+    <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+    <br>
   <label for="name">NAME</label>
   <input type="text" th:field="*{name}" id="name">
     <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>

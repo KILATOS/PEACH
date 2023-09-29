@@ -32,7 +32,7 @@ public class UsersRepository {
                 stream().findAny();
     }
     public void updateOne(long id, User updatedUser){
-        jdbcTemplate.update("update users set name = ? where id = ?",updatedUser.getName(), id );
+        jdbcTemplate.update("update users set name = ?, address = ? where id = ?",updatedUser.getName(),updatedUser.getAddress(), id );
 
 
     }
@@ -40,7 +40,7 @@ public class UsersRepository {
         return jdbcTemplate.query("SELECT * FROM users", new BeanPropertyRowMapper<>(User.class));
     }
     public void save(User user){
-        jdbcTemplate.update("insert into users (name) values (?)", user.getName());
+        jdbcTemplate.update("insert into users (name, address) values (?, ?)", user.getName(), user.getAddress());
 
     }
     public void delete(long id){
@@ -65,7 +65,7 @@ public class UsersRepository {
     private static List<User> createManyUsers(){
         List<User> result = new ArrayList<>();
         for (int i = 0; i < 1000; i++) {
-            User curUser = new User(i,"Name" + i);
+            User curUser = new User(i,"Name" + i, "dummyEmail" + i + "@gmail.com");
             result.add(curUser);
         }
         return result;
