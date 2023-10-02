@@ -2,10 +2,12 @@ package org.peach.app.repositories;
 
 import org.peach.app.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -19,5 +21,19 @@ public class BooksRepository {
     public List<Book> getAllBooks(){
         return jdbcTemplate.query("SELECT * FROM books", new BeanPropertyRowMapper<>(Book.class));
     }
+    public void save(Book book){
+        try {
+            jdbcTemplate.update("INSERT INTO books (name, year, author) VALUES (?,?,?)",
+                    book.getName(),
+                    book.getYear(),
+                    book.getAuthor());
+            System.out.println(new Date().toString() + "success");
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            System.out.println( new Date().toString() + "fail");
+        }
+    }
+
+
 
 }

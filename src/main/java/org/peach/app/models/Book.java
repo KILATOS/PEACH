@@ -1,9 +1,14 @@
 package org.peach.app.models;
 
+import javax.validation.constraints.*;
+
 public class Book {
     private long id;
+    @NotEmpty
     private String name;
-    private int year;
+
+    @Positive(message = "year should be greater than 0")
+    private int year; // добавить валидацию того, что это число
     private String author;
 
     public Book(String name, int year, String author) {
