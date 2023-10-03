@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Component
 public class BooksRepository {
@@ -31,6 +32,17 @@ public class BooksRepository {
         } catch (DataAccessException e) {
             e.printStackTrace();
             System.out.println( new Date().toString() + "fail");
+        }
+    }
+    public Book findOne(long id){
+        try {
+            return jdbcTemplate.query("SELECT * FROM books WHERE id = ?", new BeanPropertyRowMapper<>(Book.class), id).
+                    stream().findAny().orElseThrow((Supplier<Throwable>) NullPointerException::new);
+
+        } catch (Throwable e) {
+            System.out.println("Error in finding one book in DB");
+            e.printStackTrace();
+            return new Book();
         }
     }
 

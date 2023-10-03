@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <link th:href="@{/styles/styleForUser.css}" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+    <title th:text="${curBook.getId()}"></title>
+</head>
+<body>
+<div>
+    <p th:text="${curBook.getName()}"></p>
+    <p th:text="${curBook.getYear()}"></p>
+    <p th:text="${curBook.getAuthor()}"></p>
+</div>
+<div class="spanOfButtons">
+
+</div>
+
+</body>
+</html>
