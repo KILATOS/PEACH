@@ -46,12 +46,20 @@ public class BooksController {
     }
 
 
-
-    //work in process
     @GetMapping("/{id}/edit")
-    public String requestToEditBook(@PathVariable("id") long id){
-        return null;
+    public String requestToEditBook(@PathVariable("id") long id,
+                                    Model model){
+        model.addAttribute("curBook", booksRepository.findOne(id));
+        return "books/edit";
     }
+
+    @PatchMapping("/{id}")
+    public String editingBook(@ModelAttribute("curBook") Book book,
+                              @PathVariable("id") long id){
+        booksRepository.updateBook(book,id);
+        return "redirect:/books/{id}";
+    }
+
 
 
 }

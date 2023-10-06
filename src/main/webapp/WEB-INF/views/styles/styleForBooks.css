@@ -1,0 +1,30 @@
+.eachBook {
+    cursor: pointer;
+    color: #ffffff; /* Белый цвет текста */
+    background: #000000;
+    display: block;
+    padding: 1rem 1.5rem;
+    margin-bottom: 10px;
+    text-decoration: none;
+    width: 5%;
+}
+.formToFillBook{
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 15%;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+.label {
+    padding: 10px;
+}
+.btn {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #8C959D; /* Серый цвет фона */
+    color: #ffffff; /* Белый цвет текста */
+    padding: 1rem 1.5rem; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px;
+    margin-bottom: 5px/* Скругляем уголки */
+}

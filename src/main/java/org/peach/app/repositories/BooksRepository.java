@@ -1,11 +1,14 @@
 package org.peach.app.repositories;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.peach.app.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -13,37 +16,42 @@ import java.util.function.Supplier;
 
 @Component
 public class BooksRepository {
-    private final JdbcTemplate jdbcTemplate;
+
+    private final SessionFactory sessionFactory;
+
     @Autowired
-    public BooksRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public BooksRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+    @Transactional
     public List<Book> getAllBooks(){
-        return jdbcTemplate.query("SELECT * FROM books", new BeanPropertyRowMapper<>(Book.class));
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select b from Book b", Book.class).getResultList();
     }
+    @Transactional
     public void save(Book book){
-        try {
-            jdbcTemplate.update("INSERT INTO books (name, year, author) VALUES (?,?,?)",
-                    book.getName(),
-                    book.getYear(),
-                    book.getAuthor());
-            System.out.println(new Date().toString() + "success");
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-            System.out.println( new Date().toString() + "fail");
-        }
+        Session session =  sessionFactory.getCurrentSession();
+        session.save(book);
     }
-    public Book findOne(long id){
-        try {
-            return jdbcTemplate.query("SELECT * FROM books WHERE id = ?", new BeanPropertyRowMapper<>(Book.class), id).
-                    stream().findAny().orElseThrow((Supplier<Throwable>) NullPointerException::new);
 
-        } catch (Throwable e) {
-            System.out.println("Error in finding one book in DB");
+    @Transactional
+    public Book findOne(long id){
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Book.class, id);
+
+    }
+    @Transactional
+    public boolean updateBook(Book book, long id){
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            session.update(book); // here could be troubles
+            return true;
+        } catch (HibernateException e) {
             e.printStackTrace();
-            return new Book();
+            return false;
         }
+
     }
 
 

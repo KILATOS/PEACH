@@ -43,7 +43,7 @@ public class UsersController {
     public String createUser(   @ModelAttribute("newUser")
                                  @Valid User user,
                                 BindingResult bindingResult){
-        userValidator.validate(user,bindingResult);
+        //userValidator.validate(user,bindingResult);
         if (bindingResult.hasErrors()){
             return "users/new";
         }

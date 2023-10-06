@@ -9,6 +9,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,15 +21,16 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Objects;
+import java.util.Properties;
 
 
 @Configuration
 @ComponentScan("org.peach.app")
 @EnableWebMvc
-@PropertySource("classpath:database.properties")
+@PropertySource("classpath:hibernate.properties")
+@EnableTransactionManagement
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
@@ -35,7 +40,6 @@ public class SpringConfig implements WebMvcConfigurer {
     public SpringConfig(ApplicationContext applicationContext, Environment environment) {
         this.applicationContext = applicationContext;
         this.environment = environment;
-        List<Integer> array = new ArrayList<>();
     }
 
     @Bean
@@ -74,18 +78,41 @@ public class SpringConfig implements WebMvcConfigurer {
         resolver.setTemplateEngine(templateEngine());
         registry.viewResolver(resolver);
     }
+
+    //
     @Bean
     public DataSource dataSource(){
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-        driverManagerDataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("driver")));
-        driverManagerDataSource.setUrl(environment.getProperty("url"));
-        driverManagerDataSource.setUsername(environment.getProperty("usernameForDB"));
-        driverManagerDataSource.setPassword(environment.getProperty("password"));
+        driverManagerDataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("hibernate.driver_class")));
+        driverManagerDataSource.setUrl(environment.getProperty("hibernate.connection.url"));
+        driverManagerDataSource.setUsername(environment.getProperty("hibernate.connection.username"));
+        driverManagerDataSource.setPassword(environment.getProperty("hibernate.connection.password"));
         return driverManagerDataSource;
     }
-    @Bean
+    /*@Bean
     public JdbcTemplate jdbcTemplate(){
         return new JdbcTemplate(dataSource());
+    }*/
+    private Properties hibernateProperties() {
+        Properties properties = new Properties();
+        properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
+        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+
+        return properties;
+    }
+    @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setPackagesToScan("org.peach.app.models");
+        sessionFactory.setHibernateProperties(hibernateProperties());
+        return sessionFactory;
+    }
+    @Bean
+    public PlatformTransactionManager hibernateTransactionManager() {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory().getObject());
+        return transactionManager;
     }
 
 }

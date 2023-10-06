@@ -1,14 +1,21 @@
 package org.peach.app.models;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
-
+@Entity
+@Table(name = "books")
 public class Book {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "name")
     @NotEmpty
     private String name;
-
+    @Column(name = "year")
     @Positive(message = "year should be greater than 0")
     private int year; // добавить валидацию того, что это число
+    @Column(name = "author")
     private String author;
 
     public Book(String name, int year, String author) {
