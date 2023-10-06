@@ -53,6 +53,12 @@ public class BooksRepository {
         }
 
     }
+    @Transactional
+    public void delete(Book book){
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(book);
+    }
+
 
 
 

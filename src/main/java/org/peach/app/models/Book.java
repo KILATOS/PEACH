@@ -2,6 +2,8 @@ package org.peach.app.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.List;
+
 @Entity
 @Table(name = "books")
 public class Book {
@@ -17,6 +19,13 @@ public class Book {
     private int year; // добавить валидацию того, что это число
     @Column(name = "author")
     private String author;
+
+
+    @ManyToMany
+    @JoinTable(name = "users_books",
+    joinColumns = @JoinColumn(name = "book_id"),
+    inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users;
 
     public Book(String name, int year, String author) {
         this.name = name;

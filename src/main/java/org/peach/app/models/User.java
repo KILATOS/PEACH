@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -21,6 +23,9 @@ public class User {
     private String address;
     @Column(name = "isadmin")
     private boolean isAdmin;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Book> books;
 
     public User(long id, String name, String email) {
         this.id = id;

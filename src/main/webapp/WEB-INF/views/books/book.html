@@ -13,6 +13,13 @@
 </div>
 <div class="spanOfButtons">
     <a th:href="@{/books/{id}/edit (id=${curBook.getId()})}" class="btn">Edit</a>
+    <form th:method="DELETE" th:action="@{/books/{id}(id=${curBook.getId()})}" th:object="${curBook}">
+        <input type="submit" value="DELETE" class="btn" ></input>
+    </form>
+</div>
+
+<div class="spanOfButtons">
+    <form action=""></form>
 </div>
 
 </body>

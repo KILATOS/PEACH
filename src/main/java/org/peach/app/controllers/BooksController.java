@@ -59,6 +59,12 @@ public class BooksController {
         booksRepository.updateBook(book,id);
         return "redirect:/books/{id}";
     }
+    @DeleteMapping("/{id}")
+    public String deleteBook(@ModelAttribute("curBook")Book book){
+        booksRepository.delete(book);
+        return "redirect:/books";
+
+    }
 
 
 
