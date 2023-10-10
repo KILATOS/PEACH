@@ -11,14 +11,17 @@
       <div class="formToFillBook">
           <label class="label" for="nameInput" >Name Input</label>
           <input type="text" th:field="*{name}" id="nameInput">
+          <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
       </div>
       <div class="formToFillBook">
           <label class="label" for="yearInput" >Year Input</label>
           <input type="text" th:field="*{year}" id="yearInput">
+          <div style="color: red" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
       </div>
       <div class="formToFillBook">
           <label for="authorInput" >Author Input</label>
           <input type="text" th:field="*{author}" id="authorInput">
+          <div style="color: red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
       </div>
       <input type="submit" class="btn" value="Update Book">
   </form>

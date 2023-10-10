@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.peach.app.util.BookValidator;
 
 import javax.validation.Valid;
 
@@ -15,9 +16,11 @@ import javax.validation.Valid;
 public class BooksController {
 
     private final BooksRepository booksRepository;
+    private final BookValidator bookValidator;
     @Autowired
-    public BooksController(BooksRepository booksRepository) {
+    public BooksController(BooksRepository booksRepository, BookValidator bookValidator) {
         this.booksRepository = booksRepository;
+        this.bookValidator = bookValidator;
     }
 
     @GetMapping()
@@ -33,6 +36,8 @@ public class BooksController {
     @PostMapping()
     public String addNewBook(@ModelAttribute("bookToAdd") @Valid Book book,
                              BindingResult bindingResult){
+        System.out.println(book.getYear());
+        bookValidator.validate(book,bindingResult);
         if (bindingResult.hasErrors()){
             return "books/new";
         }
@@ -54,8 +59,13 @@ public class BooksController {
     }
 
     @PatchMapping("/{id}")
-    public String editingBook(@ModelAttribute("curBook") Book book,
+    public String editingBook(@ModelAttribute("curBook") @Valid Book book,
+                              BindingResult bindingResult,
                               @PathVariable("id") long id){
+        bookValidator.validate(book,bindingResult);
+        if (bindingResult.hasErrors()){
+            return "books/edit";
+        }
         booksRepository.updateBook(book,id);
         return "redirect:/books/{id}";
     }

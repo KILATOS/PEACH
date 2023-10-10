@@ -12,12 +12,13 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "name")
-    @NotEmpty
+    @NotEmpty (message = "name shouldn`t be empty")
     private String name;
     @Column(name = "year")
     @Positive(message = "year should be greater than 0")
     private int year; // добавить валидацию того, что это число
     @Column(name = "author")
+    @NotEmpty (message = "author shouldn`t be empty")
     private String author;
 
 
