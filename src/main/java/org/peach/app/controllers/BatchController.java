@@ -20,22 +20,5 @@ public class BatchController {
         return "batch/index";
     }
 
-    @GetMapping("/without")
-    public String testWithoutBatch(){
-        usersRepository.insertMultiple();
-        return "redirect:/users";
 
-    }
-
-    @GetMapping("/with")
-    public String testWithBatch(){
-        usersRepository.insertBatch();
-        return "redirect:/users";
-
-    }
-    @GetMapping("/deleting")
-    public String batchDeleting(){
-        usersRepository.deleteBatch();
-        return "redirect:/users";
-    }
 }

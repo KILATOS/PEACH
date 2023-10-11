@@ -4,6 +4,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.peach.app.models.Book;
+import org.peach.app.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -57,6 +58,14 @@ public class BooksRepository {
     public void delete(Book book){
         Session session = sessionFactory.getCurrentSession();
         session.delete(book);
+    }
+    @Transactional
+    public void appointBook(User user, long id){
+        Session session = sessionFactory.getCurrentSession();
+        session.createSQLQuery("insert into users_books (user_id, book_id, time) VALUES (:userId,:bookId,:time)")
+                .setParameter("userId",user.getId())
+                .setParameter("bookId", id)
+                .setParameter("time", new Date()).executeUpdate();
     }
 
 

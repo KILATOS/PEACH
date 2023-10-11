@@ -1,7 +1,9 @@
 package org.peach.app.controllers;
 
 import org.peach.app.models.Book;
+import org.peach.app.models.User;
 import org.peach.app.repositories.BooksRepository;
+import org.peach.app.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +18,12 @@ import javax.validation.Valid;
 public class BooksController {
 
     private final BooksRepository booksRepository;
+    private final UsersRepository usersRepository;
     private final BookValidator bookValidator;
     @Autowired
-    public BooksController(BooksRepository booksRepository, BookValidator bookValidator) {
+    public BooksController(BooksRepository booksRepository, UsersRepository usersRepository, BookValidator bookValidator) {
         this.booksRepository = booksRepository;
+        this.usersRepository = usersRepository;
         this.bookValidator = bookValidator;
     }
 
@@ -73,8 +77,26 @@ public class BooksController {
     public String deleteBook(@ModelAttribute("curBook")Book book){
         booksRepository.delete(book);
         return "redirect:/books";
-
     }
+    @GetMapping("/appoint/{id}")
+    public String showAppointPage(Model model,
+                                  @ModelAttribute("chosenUser") User user,
+                                  @PathVariable("id") long id
+                                  ){
+        model.addAttribute("curBook", booksRepository.findOne(id));
+        model.addAttribute("users", usersRepository.index());
+        return "books/choose";
+    }
+
+
+    @PostMapping("/appoint/{id}")
+    public String appointBookToUser(Model model,
+                                    @ModelAttribute("chosenUser") User user,
+                                    @PathVariable("id") long id){
+        booksRepository.appointBook(user,id);
+        return "redirect:/books";
+    }
+
 
 
 

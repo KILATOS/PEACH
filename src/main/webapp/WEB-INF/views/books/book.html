@@ -16,11 +16,10 @@
     <form th:method="DELETE" th:action="@{/books/{id}(id=${curBook.getId()})}" th:object="${curBook}">
         <input type="submit" value="DELETE" class="btn" ></input>
     </form>
+    <a th:href="@{/books/appoint/{id}(id=${curBook.getId()})}">Appoint</a>
 </div>
 
-<div class="spanOfButtons">
-    <form action=""></form>
-</div>
+
 
 </body>
 </html>

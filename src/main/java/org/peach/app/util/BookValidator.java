@@ -21,10 +21,13 @@ public class BookValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Book curBook = (Book) target;
-        errors.getFieldErrors("year").forEach(o-> System.out.println(o.getDefaultMessage()));
         if (!errors.getFieldErrors("year").isEmpty()) {
-            FieldError error = errors.getFieldErrors("year").stream().filter(o->o.getDefaultMessage().contains("NumberFormatException")).findAny().orElse(null);
-            if (error!=null) {
+            FieldError error = errors.getFieldErrors("year").stream().
+                            filter(o -> o.getDefaultMessage().
+                            contains("NumberFormatException")).
+                            findAny().
+                            orElse(null);
+            if (error != null) {
                 try {
                     Field defaultMessage = error.getClass().getSuperclass().getSuperclass().getDeclaredField("defaultMessage");
                     defaultMessage.setAccessible(true);

@@ -68,4 +68,12 @@ public class Book {
     public void setId(long id) {
         this.id = id;
     }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }
