@@ -22,6 +22,9 @@ public class Book {
     private String author;
 
 
+    @Column(name = "istaken")
+    private boolean istaken;
+
     @ManyToMany
     @JoinTable(name = "users_books",
     joinColumns = @JoinColumn(name = "book_id"),
@@ -75,5 +78,13 @@ public class Book {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public boolean isIstaken() {
+        return istaken;
+    }
+
+    public void setIstaken(boolean istaken) {
+        this.istaken = istaken;
     }
 }

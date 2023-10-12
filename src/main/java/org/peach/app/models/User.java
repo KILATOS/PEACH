@@ -16,16 +16,19 @@ public class User {
     @NotEmpty(message =  "Name shouldn't be empty")
     @Size(min = 2, max = 30, message = "Invalid size of name")
     @Column(name = "name")
+    @Pattern(regexp = "[a-zA-Z]+" , message = "name should contains only letters")
     private String name;
     @NotEmpty (message =  "Address shouldn't be empty")
     @Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}", message = "Your address should be like this: \"Country, City, 000000\"")
     @Column(name = "address")
     private String address;
-    @Column(name = "isadmin")
-    private boolean isAdmin;
+
 
     @ManyToMany(mappedBy = "users")
     private List<Book> books;
+
+    @Column(name = "hasbook")
+    private boolean hasBook;
 
     public User(long id, String name, String email) {
         this.id = id;
@@ -65,12 +68,12 @@ public class User {
         this.address = address;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
+    public boolean isHasBook() {
+        return hasBook;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setHasBook(boolean hasBook) {
+        this.hasBook = hasBook;
     }
 
     public List<Book> getBooks() {
@@ -79,5 +82,13 @@ public class User {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

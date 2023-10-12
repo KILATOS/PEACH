@@ -42,12 +42,7 @@ public class UsersRepository {
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(updatedUser); // here can be troubles
     }
-    @Transactional
-    public void updateIsAdmin(User userToUpdate){
-        Session session = sessionFactory.getCurrentSession();
-        User curUser = session.get(User.class, userToUpdate.getId());
-        curUser.setAdmin(true);
-    }
+
     @Transactional
     public List<User> index(){
         Session session = sessionFactory.getCurrentSession();

@@ -10,7 +10,7 @@
 
         <label for="user">Chose User</label>
         <select th:object="${chosenUser}" th:field="*{id}" id="user">
-            <option th:each="user : ${users}" th:value = ${user.getId()} th:text="${user.getName()}">
+            <option th:each="user : ${users}" th:if="${not user.isHasBook()}" th:value = ${user.getId()} th:text="${user.getName()}">
 
             </option>
         </select>

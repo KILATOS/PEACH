@@ -16,7 +16,11 @@
     <form th:method="DELETE" th:action="@{/books/{id}(id=${curBook.getId()})}" th:object="${curBook}">
         <input type="submit" value="DELETE" class="btn" ></input>
     </form>
-    <a th:href="@{/books/appoint/{id}(id=${curBook.getId()})}">Appoint</a>
+    <a th:if="${not curBook.isIstaken()}" th:href="@{/books/appoint/{id}(id=${curBook.getId()})}" class="btn">Appoint</a>
+
+    <form th:method="POST" th:if="${curBook.isIstaken()}" th:action="@{/books/release/{id}(id=${curBook.getId()})}">
+        <input type="submit" value="Release" class="btn">
+    </form>
 </div>
 
 

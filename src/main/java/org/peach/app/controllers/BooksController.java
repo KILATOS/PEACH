@@ -96,6 +96,12 @@ public class BooksController {
         booksRepository.appointBook(user,id);
         return "redirect:/books";
     }
+    @PostMapping("/release/{id}")
+    public String releaseBook(Model model,
+                              @PathVariable("id") long id){
+        booksRepository.releaseBook(id);
+        return "redirect:/books/{id}";
+    }
 
 
 
