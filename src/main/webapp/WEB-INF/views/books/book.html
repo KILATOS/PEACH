@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
-    <link th:href="@{/styles/styleForUser.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/styles/styleForBooks.css}" rel="stylesheet" type="text/css" />
     <meta charset="UTF-8">
     <title th:text="${curBook.getId()}"></title>
 </head>
 <body>
 <div>
-    <p th:text="${curBook.getName()}"></p>
-    <p th:text="${curBook.getYear()}"></p>
-    <p th:text="${curBook.getAuthor()}"></p>
+    <p th:text="'| '+${curBook.getName()}+' |'" class="field"></p>
+    <p th:text="'| '+${curBook.getYear()}+' |'" class="field"></p>
+    <p th:text="'| '+${curBook.getAuthor()}+' |'" class="field"></p>
 </div>
 <div class="spanOfButtons">
     <a th:href="@{/books/{id}/edit (id=${curBook.getId()})}" class="btn">Edit</a>
@@ -21,7 +21,9 @@
     <form th:method="POST" th:if="${curBook.isIstaken()}" th:action="@{/books/release/{id}(id=${curBook.getId()})}">
         <input type="submit" value="Release" class="btn">
     </form>
+
 </div>
+<div th:if="${curBook.isIstaken()}" th:text="'| '+ ${curUser.getName() + ' is owner '}+' |'" class="field"></div>
 
 
 

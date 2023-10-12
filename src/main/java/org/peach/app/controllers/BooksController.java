@@ -4,6 +4,7 @@ import org.peach.app.models.Book;
 import org.peach.app.models.User;
 import org.peach.app.repositories.BooksRepository;
 import org.peach.app.repositories.UsersRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.peach.app.util.BookValidator;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -20,11 +22,13 @@ public class BooksController {
     private final BooksRepository booksRepository;
     private final UsersRepository usersRepository;
     private final BookValidator bookValidator;
+
     @Autowired
     public BooksController(BooksRepository booksRepository, UsersRepository usersRepository, BookValidator bookValidator) {
         this.booksRepository = booksRepository;
         this.usersRepository = usersRepository;
         this.bookValidator = bookValidator;
+
     }
 
     @GetMapping()
@@ -50,7 +54,12 @@ public class BooksController {
     }
     @GetMapping("/{id}")
     public String getOneBook(@PathVariable("id") long id, Model model){
-        model.addAttribute("curBook",booksRepository.findOne(id));
+        Book curBook = booksRepository.findOne(id);
+        model.addAttribute("curBook",curBook);
+        if (curBook.isIstaken()) {
+            Optional<User> curUser = booksRepository.ownerCheck(id);
+            curUser.ifPresent(user -> model.addAttribute("curUser", user));
+        }
         return "books/book";
     }
 

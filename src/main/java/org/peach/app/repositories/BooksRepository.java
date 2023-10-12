@@ -92,6 +92,22 @@ public class BooksRepository {
             System.out.println();
         }
     }
+    @Transactional
+    public Optional<User> ownerCheck(long id){
+        Session session = sessionFactory.getCurrentSession();
+        Book curBook = session.get(Book.class, id);
+        try {
+            List users = session.
+                    createSQLQuery("SELECT ub.user_id FROM users_books as ub where ub.book_id = :bookID order by ub.time desc ").
+                    setParameter("bookID",curBook.getId()).
+                    getResultList();
+            BigInteger userId = (BigInteger) users.get(0);
+            User curUser = session.get(User.class, userId.longValue());
+            return Optional.of(curUser);
+        } catch (NullPointerException e) {
+            return Optional.empty();
+        }
+    }
 
 
 

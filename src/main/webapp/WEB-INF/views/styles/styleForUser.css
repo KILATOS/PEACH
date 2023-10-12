@@ -5,7 +5,8 @@
     padding: 1rem 1.5rem; /* Поля вокруг текста */
     text-decoration: none; /* Убираем подчёркивание */
     border-radius: 3px;
-    margin-bottom: 5px/* Скругляем уголки */
+    margin-bottom: 5px;/* Скругляем уголки */
+    margin-right: 20px;
 }
 .eachUser {
     cursor: pointer;
@@ -31,8 +32,7 @@
 }
 .spanOfButtons {
     display: flex;
-    justify-content: space-between;
-    width: 10%;
+    justify-content: flex-start;
     flex-wrap: wrap;
 
 }
