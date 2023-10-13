@@ -1,5 +1,6 @@
 package org.peach.app.controllers;
 
+import org.peach.app.exceptions.UserNotFoundException;
 import org.peach.app.models.User;
 import org.peach.app.services.UserService;
 import org.peach.app.util.UserValidator;
@@ -31,8 +32,12 @@ public class UsersController {
     }
     @GetMapping("/{id}")
     public String show(@PathVariable("id") long id, Model model){
-        model.addAttribute("id",id);
-        model.addAttribute("user", userService.findOne(id));
+        try {
+            model.addAttribute("id",id);
+            model.addAttribute("user", userService.findOne(id));
+        } catch (UserNotFoundException e) {
+            return "errors/userNotFound";
+        }
         return "users/user";
     }
 
