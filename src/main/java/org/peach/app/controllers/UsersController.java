@@ -1,5 +1,6 @@
 package org.peach.app.controllers;
 
+import org.peach.app.exceptions.CannotDeleteUserException;
 import org.peach.app.exceptions.UserNotFoundException;
 import org.peach.app.models.User;
 import org.peach.app.services.UserService;
@@ -36,6 +37,7 @@ public class UsersController {
             model.addAttribute("id",id);
             model.addAttribute("user", userService.findOne(id));
         } catch (UserNotFoundException e) {
+            e.printStackTrace();
             return "errors/userNotFound";
         }
         return "users/user";
@@ -76,7 +78,12 @@ public class UsersController {
     }
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") long id){
-        userService.deleteById(id);
+        try {
+            userService.deleteById(id);
+        } catch (CannotDeleteUserException e) {
+            e.printStackTrace();
+            return "errors/cannotDeleteUser";
+        }
         return "redirect:/users";
     }
 

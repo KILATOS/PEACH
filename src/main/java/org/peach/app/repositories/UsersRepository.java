@@ -11,9 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface UsersRepository extends JpaRepository<User,Long> {
-    Optional<User> findFirstByNameIgnoreCase(@NotEmpty(message = "Name shouldn't be empty")
-                                        @Size(min = 2, max = 30, message = "Invalid size of name")
-                                        @Pattern(regexp = "[a-zA-Z]+", message = "name should contains only letters")
-                                        String name);
+    Optional<User> findFirstByNameIgnoreCase( String name);
+
+
+
 
 }

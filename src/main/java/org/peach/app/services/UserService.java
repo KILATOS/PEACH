@@ -1,5 +1,6 @@
 package org.peach.app.services;
 
+import org.peach.app.exceptions.CannotDeleteUserException;
 import org.peach.app.exceptions.UserNotFoundException;
 import org.peach.app.models.User;
 import org.peach.app.repositories.UsersRepository;
@@ -40,8 +41,15 @@ public class UserService {
 
     }
     @Transactional
-    public void deleteById(long id){
-        usersRepository.deleteById(id);
+    public void deleteById(long id) throws CannotDeleteUserException{
+        User curUser = usersRepository.getOne(id);
+        if (!curUser.isHasBook()){
+            usersRepository.deleteById(id);
+        } else {
+            throw new CannotDeleteUserException(
+                    String.format("User with id %d cannot be deleted `cause one has a book", id));
+        }
+
     }
 
     public Optional<User> findOneByNameIgnoreCase(String name){

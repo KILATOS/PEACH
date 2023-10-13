@@ -16,7 +16,7 @@ public class User {
     @NotEmpty(message =  "Name shouldn't be empty")
     @Size(min = 2, max = 30, message = "Invalid size of name")
     @Column(name = "name")
-    @Pattern(regexp = "[a-zA-Z]+" , message = "name should contains only letters")
+    @Pattern(regexp = "[a-zA-Z]+" , message = "Name should contains only letters")
     private String name;
     @NotEmpty (message =  "Address shouldn't be empty")
     @Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}", message = "Your address should be like this: \"Country, City, 000000\"")

@@ -1,5 +1,7 @@
 package org.peach.app.models;
 
+import org.peach.app.config.SpringConfig;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;
@@ -16,9 +18,11 @@ public class Book {
     private String name;
     @Column(name = "year")
     @Positive(message = "year should be greater than 0")
-    private int year; // добавить валидацию того, что это число
+    @Max(value = SpringConfig.maxYearInBook, message = "year should be less than " + SpringConfig.maxYearInBook)
+    private int year;
     @Column(name = "author")
     @NotEmpty (message = "author shouldn`t be empty")
+    @Pattern(regexp = "[a-zA-Z `.\\-]+" , message = "name should contains only letters")
     private String author;
 
 
