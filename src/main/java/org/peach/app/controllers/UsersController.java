@@ -1,7 +1,7 @@
 package org.peach.app.controllers;
 
 import org.peach.app.models.User;
-import org.peach.app.repositories.UsersRepository;
+import org.peach.app.services.UserService;
 import org.peach.app.util.UserValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,24 +13,26 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/users")
 public class UsersController {
-    private final UsersRepository usersRepository;
-    private final UserValidator userValidator;
 
-    public UsersController(UsersRepository usersRepository, UserValidator userValidator) {
-        this.usersRepository = usersRepository;
+    private final UserValidator userValidator;
+    private final UserService userService;
+
+    public UsersController(UserValidator userValidator, UserService userService) {
+
         this.userValidator = userValidator;
+        this.userService = userService;
     }
 
     @GetMapping()
     public String index(Model model){
-        model.addAttribute("users",usersRepository.index());
+        model.addAttribute("users", userService.findAll());
 
         return "users/index";
     }
     @GetMapping("/{id}")
     public String show(@PathVariable("id") long id, Model model){
         model.addAttribute("id",id);
-        model.addAttribute("user",usersRepository.findOneById(id));
+        model.addAttribute("user", userService.findOne(id));
         return "users/user";
     }
 
@@ -43,16 +45,16 @@ public class UsersController {
     public String createUser(   @ModelAttribute("newUser")
                                  @Valid User user,
                                 BindingResult bindingResult){
-        //userValidator.validate(user,bindingResult);
+        userValidator.validate(user,bindingResult);
         if (bindingResult.hasErrors()){
             return "users/new";
         }
-        usersRepository.save(user);
+        userService.save(user);
         return "redirect:/users";
     }
     @GetMapping("/{id}/edit")
     public String requestToEditUser(Model model, @PathVariable("id") long id){
-        model.addAttribute("curUser", usersRepository.findOneById(id));
+        model.addAttribute("curUser", userService.findOne(id));
         return "users/edit";
     }
     @PatchMapping("/{id}")
@@ -63,12 +65,13 @@ public class UsersController {
         if (bindingResult.hasErrors()){
             return "users/edit";
         }
-        usersRepository.updateOne(id,user);
+        userService.update(id,user);
+
         return "redirect:/users";
     }
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") long id){
-        usersRepository.delete(id);
+        userService.deleteById(id);
         return "redirect:/users";
     }
 

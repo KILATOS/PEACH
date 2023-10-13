@@ -2,8 +2,8 @@ package org.peach.app.controllers;
 
 import org.peach.app.models.Book;
 import org.peach.app.models.User;
-import org.peach.app.repositories.BooksRepository;
-import org.peach.app.repositories.UsersRepository;
+import org.peach.app.dao.BooksDAO;
+import org.peach.app.dao.UsersDAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,21 +19,21 @@ import java.util.Optional;
 @RequestMapping("/books")
 public class BooksController {
 
-    private final BooksRepository booksRepository;
-    private final UsersRepository usersRepository;
+    private final BooksDAO booksDAO;
+    private final UsersDAO usersDAO;
     private final BookValidator bookValidator;
 
     @Autowired
-    public BooksController(BooksRepository booksRepository, UsersRepository usersRepository, BookValidator bookValidator) {
-        this.booksRepository = booksRepository;
-        this.usersRepository = usersRepository;
+    public BooksController(BooksDAO booksDAO, UsersDAO usersDAO, BookValidator bookValidator) {
+        this.booksDAO = booksDAO;
+        this.usersDAO = usersDAO;
         this.bookValidator = bookValidator;
 
     }
 
     @GetMapping()
     public String booksIndex(Model model){
-        model.addAttribute("allBooks", booksRepository.getAllBooks());
+        model.addAttribute("allBooks", booksDAO.getAllBooks());
         return "books/index";
     }
     @GetMapping("/new")
@@ -49,15 +49,15 @@ public class BooksController {
         if (bindingResult.hasErrors()){
             return "books/new";
         }
-        booksRepository.save(book);
+        booksDAO.save(book);
         return "redirect:/books";
     }
     @GetMapping("/{id}")
     public String getOneBook(@PathVariable("id") long id, Model model){
-        Book curBook = booksRepository.findOne(id);
+        Book curBook = booksDAO.findOne(id);
         model.addAttribute("curBook",curBook);
         if (curBook.isIstaken()) {
-            Optional<User> curUser = booksRepository.ownerCheck(id);
+            Optional<User> curUser = booksDAO.ownerCheck(id);
             curUser.ifPresent(user -> model.addAttribute("curUser", user));
         }
         return "books/book";
@@ -67,7 +67,7 @@ public class BooksController {
     @GetMapping("/{id}/edit")
     public String requestToEditBook(@PathVariable("id") long id,
                                     Model model){
-        model.addAttribute("curBook", booksRepository.findOne(id));
+        model.addAttribute("curBook", booksDAO.findOne(id));
         return "books/edit";
     }
 
@@ -79,12 +79,12 @@ public class BooksController {
         if (bindingResult.hasErrors()){
             return "books/edit";
         }
-        booksRepository.updateBook(book,id);
+        booksDAO.updateBook(book,id);
         return "redirect:/books/{id}";
     }
     @DeleteMapping("/{id}")
     public String deleteBook(@ModelAttribute("curBook")Book book){
-        booksRepository.delete(book);
+        booksDAO.delete(book);
         return "redirect:/books";
     }
     @GetMapping("/appoint/{id}")
@@ -92,8 +92,8 @@ public class BooksController {
                                   @ModelAttribute("chosenUser") User user,
                                   @PathVariable("id") long id
                                   ){
-        model.addAttribute("curBook", booksRepository.findOne(id));
-        model.addAttribute("users", usersRepository.index());
+        model.addAttribute("curBook", booksDAO.findOne(id));
+        model.addAttribute("users", usersDAO.index());
         return "books/choose";
     }
 
@@ -102,13 +102,13 @@ public class BooksController {
     public String appointBookToUser(Model model,
                                     @ModelAttribute("chosenUser") User user,
                                     @PathVariable("id") long id){
-        booksRepository.appointBook(user,id);
+        booksDAO.appointBook(user,id);
         return "redirect:/books";
     }
     @PostMapping("/release/{id}")
     public String releaseBook(Model model,
                               @PathVariable("id") long id){
-        booksRepository.releaseBook(id);
+        booksDAO.releaseBook(id);
         return "redirect:/books/{id}";
     }
 

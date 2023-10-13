@@ -1,4 +1,4 @@
-package org.peach.app.repositories;
+package org.peach.app.dao;
 
 import org.peach.app.models.User;
 import org.springframework.jdbc.core.RowMapper;

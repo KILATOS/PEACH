@@ -1,29 +1,25 @@
-package org.peach.app.repositories;
+package org.peach.app.dao;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.mapping.Collection;
 import org.peach.app.models.Book;
 import org.peach.app.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Supplier;
 
 @Component
-public class BooksRepository {
+public class BooksDAO {
 
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public BooksRepository(SessionFactory sessionFactory) {
+    public BooksDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

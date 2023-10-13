@@ -2,6 +2,7 @@ package org.peach.app.util;
 
 import org.peach.app.models.User;
 import org.peach.app.repositories.UsersRepository;
+import org.peach.app.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -12,11 +13,12 @@ import java.util.Optional;
 @Component
 public class UserValidator implements Validator {
 
-    private final UsersRepository usersRepository;
+    private final UserService usersService;
 
     @Autowired
-    public UserValidator(UsersRepository usersRepository) {
-        this.usersRepository = usersRepository;
+    public UserValidator(UserService usersService) {
+        this.usersService = usersService;
+
     }
 
     @Override
@@ -27,7 +29,7 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         User curUser = (User) target;
-        Optional<User> userToFind = usersRepository.findOneByName(curUser.getName());
+        Optional<User> userToFind = usersService.findOneByNameIgnoreCase(curUser.getName());
         if (userToFind.isPresent()){
             if (userToFind.get().getId() != curUser.getId()) {
                 errors.rejectValue("name","","This name is already exists");
