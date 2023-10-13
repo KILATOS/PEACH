@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<header th:insert = "fragments/components :: header"></header>
 <body>
 <form th:method="PATCH" th:action="@{/users/{id}(id=${curUser.getId()})}" th:object="${curUser}">
     <div class="formToFill">

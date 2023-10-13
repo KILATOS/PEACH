@@ -13,5 +13,9 @@ public class CssController {
     }
     @RequestMapping("/styleForBooks.css")
     public String getStyleForBooks(){return "styles/styleForBooks";}
+    @RequestMapping("/styleForHeader.css")
+    public String getStyleForHeader(){
+        return "styles/styleForHeader";
+    }
 
 }

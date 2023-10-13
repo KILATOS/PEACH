@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<header th:insert = "fragments/components :: header"></header>
 <body>
-<hr>
+
 <div th:each="book : ${allBooks}">
   <a th:href="@{/books/{id}(id=${book.getId()})}" class="eachBook" th:text="${book.getName()}"></a>
 </div>
