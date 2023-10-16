@@ -4,6 +4,7 @@ import org.peach.app.exceptions.CannotDeleteUserException;
 import org.peach.app.exceptions.UserNotFoundException;
 import org.peach.app.models.User;
 import org.peach.app.services.UserService;
+import org.peach.app.util.Gender;
 import org.peach.app.util.UserValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/users")
@@ -45,15 +47,20 @@ public class UsersController {
 
 
     @GetMapping("/new")
-    public String requestToAddNewUser(@ModelAttribute("newUser") User user){
+    public String requestToAddNewUser(Model model,
+                                      @ModelAttribute("newUser") User user){
+        model.addAttribute("genders",Arrays.asList(Gender.MALE,Gender.FEMALE));
+
         return "users/new";
     }
     @PostMapping()
-    public String createUser(   @ModelAttribute("newUser")
+    public String createUser(   Model model,
+                                @ModelAttribute("newUser")
                                  @Valid User user,
                                 BindingResult bindingResult){
         userValidator.validate(user,bindingResult);
         if (bindingResult.hasErrors()){
+            model.addAttribute("genders",Arrays.asList(Gender.MALE,Gender.FEMALE));
             return "users/new";
         }
         userService.save(user);

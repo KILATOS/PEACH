@@ -18,6 +18,13 @@
         <input type="text" th:field="*{name}" id="name">
         <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
     </div>
+    <div class="formToFill">
+        <label for="gender" class="label">GENDER</label>
+        <select th:object="${newUser}" th:field="*{gender}" id="gender">
+            <option th:each="g : ${genders}" th:value="${g}" th:text="${g.toString()}"></option>
+        </select>
+
+    </div>
 
     <input type="submit" value="Add" class="btn"></input>
 </form>

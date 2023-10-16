@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,7 +31,8 @@ public class BooksUsersService {
 
     @Transactional
     public void appointBook(User user, long bookId) {
-        booksUsersRepository.save(new Book_User(user.getId(), bookId, LocalDateTime.now()));
+        Date curDate = new Date();
+        booksUsersRepository.save(new Book_User(user.getId(), bookId, curDate));
         User curUser = usersRepository.getOne(user.getId());
         Book curBook = booksRepository.getOne(bookId);
         curUser.setHasBook(true);

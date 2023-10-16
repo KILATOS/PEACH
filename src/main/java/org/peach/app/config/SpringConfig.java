@@ -31,7 +31,6 @@ import java.util.Properties;
 @ComponentScan("org.peach.app")
 @EnableWebMvc
 @PropertySource("classpath:hibernate.properties")
-
 @EnableJpaRepositories("org.peach.app.repositories")
 @EnableTransactionManagement
 public class SpringConfig implements WebMvcConfigurer {

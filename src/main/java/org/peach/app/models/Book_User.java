@@ -1,7 +1,10 @@
 package org.peach.app.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "users_books")
@@ -16,12 +19,14 @@ public class Book_User {
     @Column(name = "book_id")
     private long bookId;
     @Column(name = "time")
-    private LocalDateTime time;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date time;
 
     public Book_User() {
     }
 
-    public Book_User(long userId, long book_id, LocalDateTime time) {
+
+    public Book_User(long userId, long book_id, Date time) {
         this.userId = userId;
         this.bookId = book_id;
         this.time = time;
@@ -51,11 +56,11 @@ public class Book_User {
         this.bookId = book_id;
     }
 
-    public LocalDateTime getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 }

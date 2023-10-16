@@ -1,5 +1,7 @@
 package org.peach.app.models;
 
+import org.peach.app.util.Gender;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -16,7 +18,7 @@ public class User {
     @NotEmpty(message =  "Name shouldn't be empty")
     @Size(min = 2, max = 30, message = "Invalid size of name")
     @Column(name = "name")
-    @Pattern(regexp = "[a-zA-Z]+" , message = "Name should contains only letters")
+    @Pattern(regexp = "[a-zA-Z `.\\-]+" , message = "Name should contains only letters")
     private String name;
     @NotEmpty (message =  "Address shouldn't be empty")
     @Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}", message = "Your address should be like this: \"Country, City, 000000\"")
@@ -30,10 +32,22 @@ public class User {
     @Column(name = "hasbook")
     private boolean hasBook;
 
+    @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+
     public User(long id, String name, String email) {
         this.id = id;
         this.name = name;
         this.address = email;
+    }
+
+    public User(long id, String name, String address, Gender gender) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.gender = gender;
     }
 
     public User(String name, String address) {
@@ -82,6 +96,14 @@ public class User {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     @Override
