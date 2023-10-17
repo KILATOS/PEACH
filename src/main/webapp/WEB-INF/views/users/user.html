@@ -10,6 +10,7 @@
 <div>
     <p th:text="'| '+${user.getName()}+' |'" class="field"></p>
     <p th:text="'| Is has book: '+${user.isHasBook()}+' |'" class="field"></p>
+    <p th:if="${user.getGender()!=null}" th:text="'| Gender: '+${user.getGender()} + ' |'"></p>
 </div>
 <div class="spanOfButtons">
     <a th:href="@{/users/{id}/edit(id=${user.getId()})}" class="btn">Edit</a>

@@ -15,14 +15,16 @@ public class Book {
     private long id;
     @Column(name = "name")
     @NotEmpty (message = "name shouldn`t be empty")
+    @Pattern(regexp = "[a-zA-Zа-яА-Я `:.\\-]+" , message = "Name should contains only letters")
     private String name;
     @Column(name = "year")
     @Positive(message = "year should be greater than 0")
-    @Max(value = SpringConfig.maxYearInBook, message = "year should be less than " + SpringConfig.maxYearInBook)
+    @Max(value = SpringConfig.maxYearInBook, message = " Year should be less than " + SpringConfig.maxYearInBook)
     private int year;
     @Column(name = "author")
+    @Size(min = 2, max = 50, message = "Invalid size of name")
     @NotEmpty (message = "author shouldn`t be empty")
-    @Pattern(regexp = "[a-zA-Z `.\\-]+" , message = "name should contains only letters")
+    @Pattern(regexp = "[a-zA-Zа-яА-Я `.\\-]+" , message = " Authors name should contains only letters")
     private String author;
 
 

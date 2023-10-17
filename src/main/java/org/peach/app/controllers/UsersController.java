@@ -68,14 +68,17 @@ public class UsersController {
     }
     @GetMapping("/{id}/edit")
     public String requestToEditUser(Model model, @PathVariable("id") long id){
+        model.addAttribute("genders",Arrays.asList(Gender.MALE,Gender.FEMALE));
         model.addAttribute("curUser", userService.findOne(id));
         return "users/edit";
     }
     @PatchMapping("/{id}")
-    public String editUser(@ModelAttribute("curUser") @Valid User user,
+    public String editUser(Model model,
+                            @ModelAttribute("curUser") @Valid User user,
                            BindingResult bindingResult,
                            @PathVariable("id") long id){
         userValidator.validate(user,bindingResult);
+        model.addAttribute("genders",Arrays.asList(Gender.MALE,Gender.FEMALE));
         if (bindingResult.hasErrors()){
             return "users/edit";
         }

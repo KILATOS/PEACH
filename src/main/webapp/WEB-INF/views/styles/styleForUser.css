@@ -21,8 +21,7 @@
 .formToFill{
     margin-bottom: 20px;
     display: flex;
-    justify-content: space-between;
-    width: 15%;
+    justify-content: flex-start;
     flex-wrap: wrap;
     align-items: baseline;
 }

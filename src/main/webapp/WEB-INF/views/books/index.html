@@ -12,8 +12,8 @@
   <a th:href="@{/books/{id}(id=${book.getId()})}" class="eachBook" th:text="${book.getName()}"></a>
 </div>
 <hr>
+<div th:insert = "fragments/components :: selectorOfPages"></div>
 <div>
-
   <a th:href="@{/books/new}" class="btn">Adding</a>
 </div>
 

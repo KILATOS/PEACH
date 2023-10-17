@@ -14,10 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.*;
 import org.peach.app.util.BookValidator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Controller
 @RequestMapping("/books")
@@ -40,10 +44,30 @@ public class BooksController {
     }
 
     @GetMapping()
-    public String booksIndex(Model model){
-        model.addAttribute("allBooks", bookService.getAllBooks());
+    public String booksIndex(HttpServletRequest httpServletRequest,   // in work
+                             Model model){
+        int booksPerPage = 16;
+        if(httpServletRequest.getParameter("page") != null){
+            int numberOfPage = 0;
+            try {
+                numberOfPage = Integer.parseInt(httpServletRequest.getParameter("page"));
+                if (numberOfPage<0){
+                    numberOfPage = 0;
+                }
+            } catch (NumberFormatException e) {
+                return "errors/invalidParameterOfRequest";
+            }
+            model.addAttribute("allBooks", bookService.getPartOfBooks(numberOfPage,booksPerPage));
+            model.addAttribute("numberOfPage", numberOfPage);
+
+        } else {
+            int numberOfPage = 0;
+            model.addAttribute("allBooks",  bookService.getPartOfBooks(numberOfPage,booksPerPage));
+            model.addAttribute("numberOfPage",numberOfPage);
+        }
         return "books/index";
     }
+
     @GetMapping("/new")
     public String requestToAddNewBook(@ModelAttribute("bookToAdd")Book book){
         return "books/new";

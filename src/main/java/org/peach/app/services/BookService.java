@@ -4,6 +4,7 @@ import org.peach.app.exceptions.BookNotFoundException;
 import org.peach.app.exceptions.CannotDeleteBookException;
 import org.peach.app.models.Book;
 import org.peach.app.repositories.BooksRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class BookService {
     private final BooksRepository booksRepository;
+    private static int lastPageIndex = -1;
 
     public BookService(BooksRepository booksRepository) {
         this.booksRepository = booksRepository;
@@ -51,8 +53,16 @@ public class BookService {
             );
         }
     }
+    public List<Book> getPartOfBooks(int page, int booksPerPage){
+        List<Book> list = booksRepository.findAll(PageRequest.of(page,booksPerPage)).getContent();
+        /*if (list.isEmpty()){
+            lastPageIndex = page - 1;
+            return booksRepository.findAll(PageRequest.of(page - 1,booksPerPage)).getContent();
+        }*/
+        return list;
+    }
 
-
-
-
+    public int getLastPageIndex() {
+        return lastPageIndex;
+    }
 }
