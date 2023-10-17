@@ -15,9 +15,10 @@
     </div>
     <hr>
 </div>
-<div th:fragment="selectorOfPages">
+<div th:fragment="selectorOfPages" style="display: flex ;align-items: center;">
     <a  th:if="${numberOfPage>0}" th:href="@{/books?page={numberOfPage}(numberOfPage=${numberOfPage-1})}" class="pageSelectorBtn" th:text="'<'"></a>
     <a  th:if="${numberOfPage==0}" class="pageSelectorBtn" th:text="'<'"></a>
+    <a  th:text="${numberOfPage + 1}"></a>
     <a  th:href="@{/books?page={numberOfPage}(numberOfPage=${numberOfPage+1})}" class="pageSelectorBtn" th:text="'>'"></a>
 </div>
 </body>

@@ -8,14 +8,28 @@
 <header th:insert = "fragments/components :: header"></header>
 <body>
 
-<div th:each="book : ${allBooks}">
-  <a th:href="@{/books/{id}(id=${book.getId()})}" class="eachBook" th:text="${book.getName()}"></a>
-</div>
+<section class="gallery">
+  <div class="container-fluid">
+    <div class="row gy-4 justify-content-center">
+      <div th:each="book : ${allBooks}" class="col-xl-3 col-lg-4 col-md-6">
+        <a th:href="@{/books/{id}(id=${book.getId()})}" class="eachBook gallery-item h-100" th:text="${book.getName()}"></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
 <hr>
-<div th:insert = "fragments/components :: selectorOfPages"></div>
-<div>
-  <a th:href="@{/books/new}" class="btn">Adding</a>
+
+<div style="display: flex ; flex-wrap: wrap;flex-direction: column;align-items: center;">
+  <div style="margin: auto"  th:insert = "fragments/components :: selectorOfPages"/>
+  <div>
+    <a style="margin: auto" th:href="@{/books/new}" class="btn">Adding</a>
+  </div>
+
 </div>
+
 
 </body>
 </html>
