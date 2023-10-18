@@ -1,6 +1,6 @@
 package org.peach.app.models;
 
-import org.peach.app.util.Gender;
+import org.peach.app.util.constants.Gender;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;

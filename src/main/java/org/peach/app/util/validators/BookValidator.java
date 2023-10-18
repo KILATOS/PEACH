@@ -1,4 +1,4 @@
-package org.peach.app.util;
+package org.peach.app.util.validators;
 
 import org.peach.app.models.Book;
 import org.springframework.beans.TypeMismatchException;

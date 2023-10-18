@@ -6,22 +6,20 @@ import org.peach.app.models.Book;
 import org.peach.app.models.Book_User;
 import org.peach.app.models.User;
 
-import org.peach.app.repositories.BooksUsersRepository;
 import org.peach.app.services.BookService;
 import org.peach.app.services.BooksUsersService;
 import org.peach.app.services.UserService;
+import org.peach.app.util.search_config.constants.BookFilter;
+import org.peach.app.util.search_config.BookSearchConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.*;
-import org.peach.app.util.BookValidator;
+import org.peach.app.util.validators.BookValidator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Controller
 @RequestMapping("/books")
@@ -45,26 +43,22 @@ public class BooksController {
 
     @GetMapping()
     public String booksIndex(HttpServletRequest httpServletRequest,   // in work
-                             Model model){
-        int booksPerPage = 16;
-        if(httpServletRequest.getParameter("page") != null){
-            int numberOfPage = 0;
-            try {
-                numberOfPage = Integer.parseInt(httpServletRequest.getParameter("page"));
-                if (numberOfPage<0){
-                    numberOfPage = 0;
-                }
-            } catch (NumberFormatException e) {
-                return "errors/invalidParameterOfRequest";
+                             Model model,
+                             @ModelAttribute("searchConfig") BookSearchConfig searchConfig){
+        int booksPerPage = 6;
+        int numberOfPage = 0;
+        try {
+            numberOfPage = Integer.parseInt(httpServletRequest.getParameter("page"));
+            if (numberOfPage<0){
+                numberOfPage = 0;
             }
-            model.addAttribute("allBooks", bookService.getPartOfBooks(numberOfPage,booksPerPage));
-            model.addAttribute("numberOfPage", numberOfPage);
-
-        } else {
-            int numberOfPage = 0;
-            model.addAttribute("allBooks",  bookService.getPartOfBooks(numberOfPage,booksPerPage));
-            model.addAttribute("numberOfPage",numberOfPage);
-        }
+        } catch (NumberFormatException ignore) {}
+        searchConfig.setBooksPerPage(booksPerPage);
+        searchConfig.setNumberOfPage(numberOfPage);
+        model.addAttribute("filter", searchConfig.getFilter());
+        model.addAttribute("allBooks", bookService.getBooks(searchConfig));
+        model.addAttribute("numberOfPage", numberOfPage);
+        model.addAttribute("filters", BookFilter.values());
         return "books/index";
     }
 

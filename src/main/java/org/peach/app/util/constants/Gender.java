@@ -1,4 +1,4 @@
-package org.peach.app.util;
+package org.peach.app.util.constants;
 
 public enum Gender {
     MALE, FEMALE

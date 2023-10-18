@@ -4,8 +4,8 @@ import org.peach.app.exceptions.CannotDeleteUserException;
 import org.peach.app.exceptions.UserNotFoundException;
 import org.peach.app.models.User;
 import org.peach.app.services.UserService;
-import org.peach.app.util.Gender;
-import org.peach.app.util.UserValidator;
+import org.peach.app.util.constants.Gender;
+import org.peach.app.util.validators.UserValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,7 +60,7 @@ public class UsersController {
                                 BindingResult bindingResult){
         userValidator.validate(user,bindingResult);
         if (bindingResult.hasErrors()){
-            model.addAttribute("genders",Arrays.asList(Gender.MALE,Gender.FEMALE));
+            model.addAttribute("genders",Arrays.asList(Gender.values()));
             return "users/new";
         }
         userService.save(user);

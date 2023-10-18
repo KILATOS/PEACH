@@ -1,4 +1,4 @@
-package org.peach.app.util;
+package org.peach.app.util.validators;
 
 import org.peach.app.models.User;
 import org.peach.app.repositories.UsersRepository;
